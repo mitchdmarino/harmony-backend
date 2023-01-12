@@ -16,6 +16,17 @@ app.use(express.json())
 //     next()
 // }
 
+app.get('/', (req, res) => {
+    try {
+        res.status(200).json({ msg: "Backend Online" })
+    } catch (error) {
+        console.log(error)
+        res.status(500).json({ msg: "Server encountered an error" })
+    }
+})
+
+app.use("/api-vi/user", require("./controllers/api-v1/user"))
+
 // Listening on port 
 app.listen(PORT, () => {
     console.log(`Server started on Port ${PORT}`)
