@@ -23,7 +23,7 @@ const UserSchema = new Schema ({
     color: {
         type: String,
     },
-    couple: {
+    coupleId: {
         type: mongoose.Types.ObjectId,
         ref: 'Couple'
     }

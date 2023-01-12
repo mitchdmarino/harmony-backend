@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const verifyUser = require("./verifyUser");
 
 // POST /user/signup
-
 router.post("/signup", async (req, res) => {
     try {
         const foundUser = await db.User.findOne({
@@ -29,7 +28,7 @@ router.post("/signup", async (req, res) => {
             lname: newUser.lname,
             email: newUser.email,
             id: newUser.id,
-            couple_id: newUser.couple
+            coupleId: newUser.coupleId
         }
         const token = jwt.sign(payload, process.env.JWT_SECRET)
         res.status(201).json({token})
@@ -71,7 +70,7 @@ router.post("/login", async (req, res) => {
         lname: findUser.lname,
         email: findUser.email,
         id: findUser.id,
-        couple_id: findUser.couple
+        coupleId: findUser.coupleId
     }
       // The jwt is signed and sent back.
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
