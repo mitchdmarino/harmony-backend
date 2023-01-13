@@ -15,7 +15,7 @@ router.post("/signup", async (req, res) => {
         }
         // Hash the User password
         const hashedPassword = await bcrypt.hash(req.body.password, 12)
-
+        
         const newUser = new db.User({
             fname: req.body.fname,
             lname: req.body.lname, 
@@ -33,9 +33,9 @@ router.post("/signup", async (req, res) => {
         const token = jwt.sign(payload, process.env.JWT_SECRET)
         res.status(201).json({token})
     } catch (error) {
-        console.warn(err)
-        if (err.name === "ValidationError") {
-            res.status(400).json({msg: err.message})
+        console.warn(error)
+        if (error.name === "ValidationError") {
+            res.status(400).json({msg: error.message})
         } else {
             res.status(500).json({msg: "Server Error"})
         }
