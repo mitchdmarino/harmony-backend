@@ -15,7 +15,7 @@ router.post("/signup", async (req, res) => {
         }
         // Hash the User password
         const hashedPassword = await bcrypt.hash(req.body.password, 12)
-        
+
         const newUser = new db.User({
             fname: req.body.fname,
             lname: req.body.lname, 
@@ -79,6 +79,16 @@ router.post("/login", async (req, res) => {
       res.status(200).json({ token })
     } catch (err) {
       console.log(err)
+    }
+  })
+
+  router.get("/", verifyUser, async(req,res) => {
+    try {
+        const user = await db.User.findById(res.locals.user.id)
+        res.status(200).json({msg: "Success", user: user})
+    } catch (error) {
+        console.warn(error)
+        res.status(500).json({msg: "Cannot GET user"})
     }
   })
 

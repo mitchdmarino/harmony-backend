@@ -7,7 +7,9 @@ const verifyUser = async (req, res, next) => {
         const authHeader = req.headers.authorization
         // The jwt is decoded.
         // A catch will be thrown if the signature is invalid.
-        const decode = jwt.verify(authHeader, process.env.JWT_SECRET)        
+        // console.log(req.headers)    
+        const decode = jwt.verify(authHeader, process.env.JWT_SECRET)
+            
         // The User in the db that sent the jwt is found.
         const foundUser = await db.User.findById(decode.id)
 
@@ -19,7 +21,7 @@ const verifyUser = async (req, res, next) => {
     } catch (err) {
         // This means there is a authentication error 
         console.warn(err)
-        res.status(401).json({ msg: 'User authentication failed'})
+        res.status(401).json({ msg: 'User authentication failed', headers: req.headers})
     }
 }
 

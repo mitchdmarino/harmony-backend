@@ -26,6 +26,7 @@ app.get('/', (req, res) => {
 })
 
 app.use("/api-v1/user", require("./controllers/api-v1/user"))
+app.use("/api-v1/couple", require("./controllers/api-v1/couple"))
 
 // Listening on port 
 app.listen(PORT, () => {
