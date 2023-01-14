@@ -19,7 +19,19 @@ router.post("/", verifyUser, async (req, res) => {
         user.coupleId = couple.id
         await couple.save()
         await user.save()
-        res.status(201).json({msg: "New couple successfully created", couple: couple, user: user})
+        // log the updated user in
+        const payload = {
+            fname: user.fname,
+            lname: user.lname,
+            email: user.email,
+            id: user.id,
+            coupleId: user.coupleId
+        }
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: "1d",
+          })
+
+        res.status(201).json({msg: "New couple successfully created", couple: couple, user: user, token: token})
     } catch (error) {
         console.warn(error)
         res.status(500).json({msg: "Server Error"})
@@ -49,7 +61,18 @@ router.post("/:id/partner", verifyUser, async (req,res) => {
         user.coupleId = couple.id
         await couple.save()
         await user.save()
-        return res.status(200).json({msg: "Success", couple: couple, user: user})
+         // log the updated user in
+         const payload = {
+            fname: user.fname,
+            lname: user.lname,
+            email: user.email,
+            id: user.id,
+            coupleId: user.coupleId
+        }
+        const token = jwt.sign(payload, process.env.JWT_SECRET, {
+            expiresIn: "1d",
+          })
+        return res.status(200).json({msg: "Success", couple: couple, user: user, token: token})
     } catch (error) {
         console.warn(error)
         res.status(500).json({msg: "Server Error"})

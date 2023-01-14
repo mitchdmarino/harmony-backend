@@ -23,6 +23,9 @@ const UserSchema = new Schema ({
     color: {
         type: String,
     },
+    profilePicture: {
+        type: String,
+    },
     coupleId: {
         type: mongoose.Types.ObjectId,
         ref: 'Couple'
