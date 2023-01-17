@@ -8,16 +8,16 @@ const verifyUser = require("./verifyUser");
 router.post("/", verifyUser, async (req, res) => {
     try {
         const user = res.locals.user
-        const couple = await db.Couple.findById(res.locals.user.coupleId)
+        const couple = await db.Couple.findById(res.locals.user.coupleId).populate("questions")
         if (couple) {
-            const newQuestion = new db.Question({
+            const newQuestion = await db.Question.create({
                 question: req.body.question,
                 couple: user.coupleId
             })
             await newQuestion.save()
             couple.questions.push(newQuestion) 
             await couple.save()
-            return res.status(201).json({msg: "New Question successfully created"})
+            return res.status(201).json({msg: "New Question successfully created", couple: couple})
         }
         else {
             return res.status(401).json({msg: "You must create or join a couple first"})
@@ -52,6 +52,7 @@ router.post("/:id/answer", verifyUser, async (req,res) => {
             question.answers.push(req.body)
         }
         await question.save()
+       
         return res.status(200).json({msg: "You answered the question", question: question})
         
     } catch (error) {
@@ -59,3 +60,5 @@ router.post("/:id/answer", verifyUser, async (req,res) => {
         return res.status(500).json({msg: "Server Error"})
     }
 })
+
+module.exports = router

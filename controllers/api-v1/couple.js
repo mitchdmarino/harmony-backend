@@ -85,11 +85,12 @@ router.get("/", verifyUser, async (req, res) => {
         if (!user.coupleId) {
             return res.status(400).json({msg: "No couple found"})
         }
-        const couple = await db.Couple.findById(user.coupleId).populate('users')
+        const couple = await db.Couple.findById(user.coupleId).populate('users').populate('questions')
         if (!couple) {
             return res.status(400).json({msg: "Couple not found"})
         }
-        res.status(200).json({msg: "Success", couple: couple})
+        console.log(couple)
+        return res.status(200).json({msg: "Success", couple: couple})
     } catch(error) {
         console.warn(error)
         res.status(500).json({msg: "Server Error"})
