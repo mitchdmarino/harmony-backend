@@ -28,16 +28,16 @@ router.post("/signup", async (req, res) => {
             lname: newUser.lname,
             email: newUser.email,
             id: newUser.id,
-            coupleId: newUser.coupleId
+            coupleId: newUser.coupleId, 
         }
         const token = jwt.sign(payload, process.env.JWT_SECRET)
         res.status(201).json({token})
     } catch (error) {
         console.warn(error)
         if (error.name === "ValidationError") {
-            res.status(400).json({msg: error.message})
+            return res.status(400).json({msg: error.message})
         } else {
-            res.status(500).json({msg: "Server Error"})
+            return res.status(500).json({msg: "Server Error"})
         }
     }
 })
@@ -70,7 +70,9 @@ router.post("/login", async (req, res) => {
         lname: findUser.lname,
         email: findUser.email,
         id: findUser.id,
-        coupleId: findUser.coupleId
+        coupleId: findUser.coupleId, 
+        color: findUser.color,
+        profilePicture: findUser.profilePicture
     }
       // The jwt is signed and sent back.
       const token = jwt.sign(payload, process.env.JWT_SECRET, {
@@ -85,20 +87,36 @@ router.post("/login", async (req, res) => {
   router.get("/", verifyUser, async(req,res) => {
     try {
         const user = await db.User.findById(res.locals.user.id)
-        res.status(200).json({msg: "Success", user: user})
+        return res.status(200).json({msg: "Success", user: user})
     } catch (error) {
         console.warn(error)
-        res.status(500).json({msg: "Cannot GET user"})
+        return res.status(500).json({msg: "Cannot GET user"})
+    }
+  })
+  router.put("/", verifyUser, async (req,res) => {
+    try {
+        const user = await db.User.findByIdAndUpdate(res.locals.user.id, {
+          fname : req.body.fname,
+          lname : req.body.lname,
+          email : req.body.email,
+          color : req.body.color,
+          profilePicture : req.body.profilePicture,
+        })
+        await user.save()
+        return res.status(200).json({msg: "Success", user: user})
+    } catch (error) {
+        console.warn(error)
+        return res.status(500).json({msg: "Cannot GET user"})
     }
   })
 
   router.delete('/', verifyUser, async(req,res) => {
     try {
         await db.User.findByIdAndDelete(res.locals.user.id)
-        res.status(200).json({msg: "Success. User deleted"})
+        return res.status(200).json({msg: "Success. User deleted"})
     } catch (error) {
         console.warn(error)
-        res.status(500).json({msg: "Error while trying to delete user"})
+        return res.status(500).json({msg: "Error while trying to delete user"})
     }
   })
 

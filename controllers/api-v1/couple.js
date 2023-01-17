@@ -31,10 +31,10 @@ router.post("/", verifyUser, async (req, res) => {
             expiresIn: "1d",
           })
 
-        res.status(201).json({msg: "New couple successfully created", couple: couple, user: user, token: token})
+        return res.status(201).json({msg: "New couple successfully created", couple: couple, user: user, token: token})
     } catch (error) {
         console.warn(error)
-        res.status(500).json({msg: "Server Error"})
+        return res.status(500).json({msg: "Server Error"})
     }
 })
 
