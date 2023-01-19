@@ -27,7 +27,7 @@ router.post("/signup", async (req, res) => {
             fname: newUser.fname,
             lname: newUser.lname,
             email: newUser.email,
-            id: newUser.id,
+            _id: newUser.id,
             coupleId: newUser.coupleId, 
         }
         const token = jwt.sign(payload, process.env.JWT_SECRET)
@@ -69,7 +69,7 @@ router.post("/login", async (req, res) => {
         fname: findUser.fname,
         lname: findUser.lname,
         email: findUser.email,
-        id: findUser.id,
+        _id: findUser.id,
         coupleId: findUser.coupleId, 
         color: findUser.color,
         profilePicture: findUser.profilePicture
