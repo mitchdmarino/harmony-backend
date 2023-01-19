@@ -24,7 +24,7 @@ router.post("/", verifyUser, async (req, res) => {
             fname: user.fname,
             lname: user.lname,
             email: user.email,
-            id: user.id,
+            _id: user.id,
             coupleId: user.coupleId, 
             color: user.color
         }
@@ -66,7 +66,7 @@ router.post("/:id/partner", verifyUser, async (req,res) => {
             fname: user.fname,
             lname: user.lname,
             email: user.email,
-            id: user.id,
+            _id: user.id,
             coupleId: user.coupleId,
             color: user.color,
         }

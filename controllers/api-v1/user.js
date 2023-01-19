@@ -20,7 +20,8 @@ router.post("/signup", async (req, res) => {
             fname: req.body.fname,
             lname: req.body.lname, 
             email: req.body.email,
-            password: hashedPassword
+            password: hashedPassword,
+            color: req.body.color
         })
         await newUser.save();
         const payload = {
@@ -29,6 +30,7 @@ router.post("/signup", async (req, res) => {
             email: newUser.email,
             _id: newUser.id,
             coupleId: newUser.coupleId, 
+            color: newUser.color
         }
         const token = jwt.sign(payload, process.env.JWT_SECRET)
         res.status(201).json({token})
@@ -80,7 +82,7 @@ router.post("/login", async (req, res) => {
       })
       res.status(200).json({ token })
     } catch (err) {
-      console.log(err)
+      console.warn(err)
     }
   })
 
