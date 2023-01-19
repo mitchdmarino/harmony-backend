@@ -5,10 +5,23 @@ const verifyUser = require("./verifyUser");
 
 // POST /question
 
+router.get("/", verifyUser, async (req,res) => {
+    try {
+        const user = res.locals.user 
+        const questions = await db.Question.find({couple: user.coupleId}).populate("answers").populate("answers.author")
+        if (questions) {
+            return res.status(200).json({msg: "Success", questions: questions})
+        }
+    } catch (error) {
+        console.warn(error)
+        return res.status(500).json({msg: "Server Error"})
+    }
+})
+
 router.post("/", verifyUser, async (req, res) => {
     try {
         const user = res.locals.user
-        const couple = await db.Couple.findById(res.locals.user.coupleId).populate("questions")
+        const couple = await db.Couple.findById(res.locals.user.coupleId).populate("questions").populate("questions.answers")
         if (couple) {
             const newQuestion = await db.Question.create({
                 question: req.body.question,
@@ -30,13 +43,20 @@ router.post("/", verifyUser, async (req, res) => {
 
 router.post("/:id/answer", verifyUser, async (req,res) => {
     try {
-        const question = await db.Question.findById(req.params.id)
+
+        const question = await db.Question.findById(req.params.id).populate("couple").populate("answers").populate("answers.author")
         // ensure that the user belongs to the same couple in the question 
-        const user = res.locals.user 
-        if (user.coupleId !== question.couple) {
-            return res.status(400).json({msg: "You do not have permission to answer this question"})
+        var user = res.locals.user 
+        user = await db.User.findById(user.id)
+        const answer = {
+            text: req.body.text,
+            author: user.id
         }
-        else if (question.answers.length === 2) {
+        // console.log(question.couple.id, "user:", user.coupleId)
+        // if (user.coupleId !== question.couple.id) {
+        //     return res.status(400).json({msg: "You do not have permission to answer this question"})
+        // }
+        if (question.answers.length === 2) {
             return res.status(400).json({msg: "Question already answered"})
         } 
         else if (question.answers.length === 1) {
@@ -45,14 +65,13 @@ router.post("/:id/answer", verifyUser, async (req,res) => {
                 return res.status(400).json({msg: "You already answered this question"})
             }
             else {
-                question.answers.push(req.body)
+                question.answers.push(answer)
             }
         }
         else {
-            question.answers.push(req.body)
+            question.answers.push(answer)
         }
-        await question.save()
-       
+        await question.save()       
         return res.status(200).json({msg: "You answered the question", question: question})
         
     } catch (error) {

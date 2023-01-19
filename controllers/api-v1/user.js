@@ -16,7 +16,7 @@ router.post("/signup", async (req, res) => {
         // Hash the User password
         const hashedPassword = await bcrypt.hash(req.body.password, 12)
 
-        const newUser = new db.User({
+        const newUser = await db.User.create({
             fname: req.body.fname,
             lname: req.body.lname, 
             email: req.body.email,

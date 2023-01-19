@@ -25,7 +25,8 @@ router.post("/", verifyUser, async (req, res) => {
             lname: user.lname,
             email: user.email,
             id: user.id,
-            coupleId: user.coupleId
+            coupleId: user.coupleId, 
+            color: user.color
         }
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: "1d",
@@ -42,7 +43,6 @@ router.post("/", verifyUser, async (req, res) => {
 router.post("/:id/partner", verifyUser, async (req,res) => {
     try {
         const user = res.locals.user
-        console.log(req.params.id)
         // make sure the user does not have a couple assigned
         if (user.coupleId) {
             return res.status(400).json({msg: "Cannot be assigned to more than 1 couple"})
@@ -67,7 +67,8 @@ router.post("/:id/partner", verifyUser, async (req,res) => {
             lname: user.lname,
             email: user.email,
             id: user.id,
-            coupleId: user.coupleId
+            coupleId: user.coupleId,
+            color: user.color,
         }
         const token = jwt.sign(payload, process.env.JWT_SECRET, {
             expiresIn: "1d",
@@ -89,7 +90,6 @@ router.get("/", verifyUser, async (req, res) => {
         if (!couple) {
             return res.status(400).json({msg: "Couple not found"})
         }
-        console.log(couple)
         return res.status(200).json({msg: "Success", couple: couple})
     } catch(error) {
         console.warn(error)
