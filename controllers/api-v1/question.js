@@ -2,9 +2,6 @@ const router = require("express").Router();
 const db = require("../../models");
 const verifyUser = require("./verifyUser");
 
-
-// POST /question
-
 router.get("/", verifyUser, async (req,res) => {
     try {
         const user = res.locals.user 
@@ -18,6 +15,7 @@ router.get("/", verifyUser, async (req,res) => {
     }
 })
 
+// POST /question
 router.post("/", verifyUser, async (req, res) => {
     try {
         const user = res.locals.user
@@ -30,7 +28,7 @@ router.post("/", verifyUser, async (req, res) => {
             await newQuestion.save()
             couple.questions.push(newQuestion) 
             await couple.save()
-            return res.status(201).json({msg: "New Question successfully created", couple: couple})
+            return res.status(201).json({msg: "New Question successfully created", couple: couple, question: newQuestion})
         }
         else {
             return res.status(401).json({msg: "You must create or join a couple first"})

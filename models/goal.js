@@ -9,8 +9,8 @@ const GoalSchema = new Schema ({
     },
     steps: [
         {
-            description: String,
-            completed: Boolean,
+            type: mongoose.Types.ObjectId,
+            ref: 'GoalStep'
         }
     ],
     couple: 

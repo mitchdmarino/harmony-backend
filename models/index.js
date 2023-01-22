@@ -24,4 +24,5 @@ module.exports = {
     Goal: require('./goal'),
     Question: require('./question'),
     Conflict: require('./conflict'),
+    GoalStep: require('./goalstep')
 }
