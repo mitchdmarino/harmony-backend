@@ -103,7 +103,7 @@ router.post("/login", async (req, res) => {
           email : req.body.email,
           color : req.body.color,
           profilePicture : req.body.profilePicture,
-        })
+        }, {new: true})
         await user.save()
         return res.status(200).json({msg: "Success", user: user})
     } catch (error) {
