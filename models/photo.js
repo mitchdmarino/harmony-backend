@@ -3,7 +3,7 @@ const Schema = mongoose.Schema
 
 
 const PhotoSchema = new Schema ({    
-    ref: {
+    url: {
         type: String,
         required: true,
     },

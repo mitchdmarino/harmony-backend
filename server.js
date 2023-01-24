@@ -29,6 +29,7 @@ app.use("/api-v1/user", require("./controllers/api-v1/user"))
 app.use("/api-v1/couple", require("./controllers/api-v1/couple"))
 app.use("/api-v1/question", require("./controllers/api-v1/question"))
 app.use("/api-v1/goal", require("./controllers/api-v1/goal"))
+app.use("/api-v1/photo", require("./controllers/api-v1/photo"))
 
 // Listening on port 
 app.listen(PORT, () => {
