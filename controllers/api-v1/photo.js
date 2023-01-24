@@ -15,6 +15,7 @@ router.get('/signature', verifyUser, async (req,res) => {
         const timestamp = Math.round((new Date).getTime()/1000)
         const signature = cloudinary.utils.api_sign_request({
             timestamp: timestamp,
+            eager: "c_fill,h_250,w_250",
             folder: "Harmony"
         }, process.env.CLOUDINARY_API_SECRET)
         return res.status(200).json({msg: "Success", timestamp: timestamp, signature: signature, apiKey: process.env.CLOUDINARY_API_KEY, cloudName: process.env.CLOUDINARY_API_CLOUD_NAME})
@@ -35,7 +36,7 @@ router.get('/:page?', verifyUser, async (req,res) => {
         if (photos) {
             
             if (req.query.page) {
-                photos = photos.slice(0+req.query.page * 10, 10+ req.query.page * 10)
+                photos = photos.slice(0+req.query.page * 12, 12+ req.query.page * 12)
                 return res.status(200).json({msg: "Success", photos: photos})
             }
             return res.status(200).json({msg: "Success", photos: photos})
