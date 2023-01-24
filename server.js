@@ -1,5 +1,6 @@
 require("dotenv").config()
 require('./models')
+const mongoose = require('mongoose')
 const express = require("express"),
     cors = require("cors"),
     bcrypt = require("bcrypt")
@@ -9,12 +10,15 @@ const PORT = process.env.PORT || 8000
 app.use(cors())
 app.use(express.json())
 
-// example middleware
-// const myMiddleware = ( req, res, next ) => {
-//     console.log('hello i am a middleware')
-//     res.locals.myData = 'I am data that is passed out of the middleware'
-//     next()
-// }
+const connectDB = async () => {
+    try {
+        const conn = await mongoose.connect(process.env.MONGODB_URI);
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+      } catch (error) {
+        console.log(error);
+        process.exit(1);
+      }
+    }
 
 app.get('/', (req, res) => {
     try {
@@ -32,6 +36,9 @@ app.use("/api-v1/goal", require("./controllers/api-v1/goal"))
 app.use("/api-v1/photo", require("./controllers/api-v1/photo"))
 
 // Listening on port 
-app.listen(PORT, () => {
-    console.log(`Server started on Port ${PORT}`)
+//Connect to the database before listening
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log("listening for requests");
+    })
 })
