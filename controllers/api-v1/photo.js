@@ -31,7 +31,7 @@ router.get('/signature', verifyUser, async (req,res) => {
 router.get('/:page?', verifyUser, async (req,res) => {
     try {
         const user = res.locals.user 
-        let photos = await db.Photo.find({})
+        let photos = await db.Photo.find({owner: user.coupleId})
         photos.reverse()
         if (photos) {
             
