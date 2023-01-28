@@ -3,7 +3,8 @@ const Schema = mongoose.Schema
 
 
 const PhotoSchema = new Schema ({    
-    url: {
+    url: 
+    {
         type: String,
         required: true,
     },
@@ -12,6 +13,16 @@ const PhotoSchema = new Schema ({
         type: mongoose.Types.ObjectId,
         ref: 'Couple'
     },
+    location: 
+    {
+        type: String,
+        default: ''
+    },
+    comment:
+    {
+        type: String,
+        default: ''
+    }
     // album: {
     //     type: mongoose.Types.ObjectId,
     //     ref: 'Album'

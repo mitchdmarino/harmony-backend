@@ -56,7 +56,9 @@ router.post('/', verifyUser, async (req,res) => {
         const couple = await db.Couple.findById(user.coupleId).populate('photos')
         const newPhoto = await db.Photo.create({
             url: url,
-            owner: couple.id
+            owner: couple.id,
+            location: req.body.location,
+            comment: req.body.comment
         })
         await newPhoto.save()
         couple.photos.push(newPhoto)
